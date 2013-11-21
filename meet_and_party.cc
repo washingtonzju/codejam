@@ -62,6 +62,7 @@ int binary_find2(vector<long long> &array, long long val)
     return md;
 }
 
+// the small brute force solution.
 void findPosition2(vector<pnt > &region, int &x, int &y, long long &dis)
 {
     dis = 10000000000000L;
@@ -78,6 +79,7 @@ void findPosition2(vector<pnt > &region, int &x, int &y, long long &dis)
     }
 }
 
+// Wrong test
 void findPosition(vector<pnt > &region, int &x, int &y, long long &dis)
 {
     vector<long long> sum_x;
@@ -133,6 +135,7 @@ void findPosition(vector<pnt > &region, int &x, int &y, long long &dis)
     }
 }
 
+// This is the right solution for the big data.
 void findPosition3(vector<pnt > &region, int &x, int &y, long long &dis)
 {
     vector<long long> sum_x;
