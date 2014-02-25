@@ -40,6 +40,22 @@ void maze_venture(vector<vector<char> >&maze, int &cnt, string &ans, point s, po
                 lhp.first = lp.first;
                 lhp.second = np.second;
                 break;
+            case 1:
+                np.first = rbt.first - 1;
+                lp.second = rbt.second - 1;
+                lhp.second = lp.second;
+                lhp.first = np.first;
+                break;
+            case 2:
+                np.second = rbt.second + 1;
+                lp.first = rbt.first - 1;
+                lhp.first = lp.first;
+                lhp.second = np.second;
+                break;
+            case 3:
+                break;
+            default:
+                break;
             }
         }
     }while(rbt.first != e.first || rbt.second != e.second);
