@@ -1,3 +1,4 @@
+/* About 30 mins */
 #include<iostream>
 #include<string>
 #include<vector>
@@ -14,6 +15,8 @@ void cal_distance(map<string, int> &belongs, map<tunnel, int> &turbolifts, vecto
     dis = vector<vector<int> >(N, vector<int> (N, -1));
 
     int tmp;
+    //for(int i=0;i<N;++i)
+    //    dis[i][i]=0;
     for(int i=0;i<N;++i)
     {
         for(int j=0;j<N;++j)
@@ -32,6 +35,7 @@ void cal_distance(map<string, int> &belongs, map<tunnel, int> &turbolifts, vecto
         {
             for(int j=0;j<N;++j)
             {
+                //if(k==i || k==j) continue;
                 if(dis[i][k]!=-1 && dis[k][j]!=-1)
                 {
                     if(dis[i][j]==-1 || dis[i][j] > dis[i][k] + dis[k][j])
@@ -79,8 +83,8 @@ int main()
             //cout << rooms[a] << " " << rooms[b] << endl;
             za = belongs[rooms[a]];
             zb = belongs[rooms[b]];
-            if(turbolifts.find(tunnel(za, zb))!=turbolifts.end() && t > turbolifts[tunnel(za, zb)])
-            turbolifts[tunnel(za,zb)] = t;
+            if(turbolifts.find(tunnel(za, zb))==turbolifts.end() || t < turbolifts[tunnel(za, zb)])
+                turbolifts[tunnel(za,zb)] = t;
         }
         
         cal_distance(belongs, turbolifts, dis);
@@ -94,6 +98,7 @@ int main()
             q--;
             za = belongs[rooms[p]];
             zb = belongs[rooms[q]];
+            //cout << za << " " << zb << endl;
             if(za == zb)
                 cout << 0 << endl;
             else
