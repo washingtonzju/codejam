@@ -32,12 +32,12 @@
 #define S second
 #define ULL unsigned long long
 using namespace std;
-#define MAXL 101
+#define MAXL 110
 typedef pair<int, int> pnt;
 
 int tt[MAXL][MAXL];
 int dd[][2] = { {1, 0}, {0, 1}, {-1, 0}, {0, -1} };
-int eng[MAXL][MAXL];
+pnt eng[MAXL][MAXL];
 bool comp(pnt a, pnt b) {
     return eng[a.F][a.S] > eng[b.F][b.S];
 }
@@ -50,42 +50,42 @@ int main()
         DRII(ex, ey);
         sx++; sy++; ex++; ey++;
         REP(i, N+2)
-            REP(j, M+2) tt[i][j] = -1, eng[i][j] = -1;
+            REP(j, M+2) tt[i][j] = -1, eng[i][j].F = -1, eng[i][j].S = 0;
         REPP(i, 1, N+1)
             REPP(j, 1, M+1) RI(tt[i][j]);
-        vector<pnt> stk;
-        eng[sx][sy] = tt[sx][sy];
-        int base = 0, end = 0;
-        stk.push_back(MP(sx, sy));
+        queue<pnt> stk;
+        eng[sx][sy].F = 0;
+        eng[sx][sy].S = tt[sx][sy];
+        //int base = 0, end = 0;
+        stk.push(MP(sx, sy));
         //++end;
         int cnt = 0;
         int flg = 0;
-        do{
-            REPP(cur, base, end+1) {
-                if(stk[cur].F == ex && stk[cur].S == ey){ flg = 1; break; }            
-                vector<pnt> cands;
-                REP(i, 4) {
-                    int tx = stk[cur].F + dd[i][0];
-                    int ty = stk[cur].S + dd[i][1];
-                    //cout << tx << " " << ty << " " << tt[tx][ty] << " "<< eng[tx][ty] << endl; 
-                    if(tt[tx][ty]!= -1 && eng[tx][ty] == -1) {
-                        cands.PB(MP(tx, ty));
-                        eng[tx][ty] = eng[stk[cur].F][stk[cur].S] + tt[tx][ty];
-                    }
+        while(stk.size() > 0){
+            int cx = stk.front().F;
+            int cy = stk.front().S;
+            stk.pop();
+            REP(i, 4) {
+                int tx = cx + dd[i][0];
+                int ty = cy + dd[i][1];
+                //cout << tx << " " << ty << " " << tt[tx][ty] << " "<< eng[tx][ty] << endl; 
+                if(tt[tx][ty]!= -1) {
+                    if(eng[tx][ty].F == -1)
+                        eng[tx][ty].F = eng[cx][cy].F + 1;
+                    else if(eng[tx][ty].F<eng[cx][cy].F+1) continue;
+                    if(eng[tx][ty].S == 0)
+                        stk.push(MP(tx,ty));
+                    int tmp = eng[cx][cy].S + tt[tx][ty];
+                    eng[tx][ty].S = (tmp>eng[tx][ty].S?tmp:eng[tx][ty].S);
                 }
-                sort(ALL(cands), comp);
-                REP(i, SZ(cands)) stk.PB(cands[i]);
-            }
-            if(flg == 1) break;
-            base = end + 1;
-            end = stk.size() - 1;
-            ++cnt;
-        }while(base <= end);
+            }                       
+        }
+        
         printf("Case #%d: ", case_n);
-        if(flg == 0)
+        if(eng[ex][ey].S==0)
             printf("Mission Impossible.\n");
         else
-            printf("%d\n", eng[ex][ey]);
+            printf("%d\n", eng[ex][ey].S);
         case_n++;
     }
     return 0;
