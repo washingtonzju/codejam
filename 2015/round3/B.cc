@@ -1,5 +1,6 @@
 #include<cstdio>
 #include<vector>
+#include<cstdlib>
 using namespace std;
 
 struct Segment
@@ -32,30 +33,33 @@ vector<Segment> generate(vector<int> sums, int K)
         if(x[i+K-1] < segs[id].st)
             segs[id].st = x[i+K-1];
     }
-    for(int i=0;i<x.size();++i)
-    {
-        printf("\t%d", x[i]);
-    }
-    printf("\n");
+    /*
+      for(int i=0;i<x.size();++i)
+      {
+      printf("\t%d", x[i]);
+      }
+      printf("\n");
+    */
     return segs;
 }
 
-bool needAdjust(vector<Segment>& input, int average, int max)
+bool needAdjust(vector<Segment>& input, vector<int>& signs, int average, int max)
 {
     int N = input.size();
+    /*
+    printf("original average = %d\n", average);
+    printf("original size = %d\n", input.size());
+    */
+    while(average < 0) average += N;
     average %= N;
-    for(int i=1;i<N;++i)
+
+    int sum_gap = 0;
+    for(int i=0;i<N;++i)
     {
-        if(average%i) continue;
-        int count = 0;
-        for(int j=0;j<N;++j)
-            if(input[j].ed + i <= max)
-                count++;
-        if(count >= average)
-        {
-            return false;
-        }
+        if(input[i].ed < max)
+            sum_gap += max - input[i].ed;
     }
+    if(sum_gap >= average) return false;
     return true;
 }
 
@@ -66,9 +70,15 @@ int answer(vector<Segment>& input)
     int average = 0;
     
     for(int i=0;i<N;++i){
-        average += input[i].st/N;        
+        average += input[i].st;        
     }
-
+    int mid = average/N;
+    vector<int> signs(N);
+    for(int i=0;i<N;++i)
+    {
+        signs[i] = (input[i].st > mid);
+    }
+    
     int max = 0;
     for(int i=0;i<N;++i){
         input[i].ed -= input[i].st;
@@ -77,7 +87,7 @@ int answer(vector<Segment>& input)
             max = input[i].ed;
     }
     
-    if(needAdjust(input, average, max))
+    if(needAdjust(input, signs, average, max))
     {
         return max + 1;
     }
