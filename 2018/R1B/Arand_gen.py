@@ -4,7 +4,7 @@ if __name__ == "__main__":
     T =  20
     print(T)
     for t in range(T):
-        N = random.randrange(1, 250)
+        N = random.randrange(1, 50)
         L = random.randrange(1, N)
         buffer = random.randrange(0, N - L + 1)
         
@@ -13,7 +13,7 @@ if __name__ == "__main__":
         line = ''
         cnt = 0
         for i in range(L):
-            val = random.randrange(0, sum+1)
+            val = random.randrange(1, sum+1)
             line += (str(val) + ' ')
             sum -= val
             cnt += 1
